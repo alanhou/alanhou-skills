@@ -17,7 +17,14 @@ async function main() {
   }
 
   const resolvedHtml = path.resolve(htmlPath);
-  const logoUrl = 'file://' + path.resolve(__dirname, 'logo.png');
+  // Embed the logo as a data URI so the rewritten HTML renders the avatar
+  // anywhere (Safari blocks file:// images outside the page's directory,
+  // and file:// paths break when the HTML is opened on another machine).
+  const logoPath = path.resolve(__dirname, 'logo.png');
+  let logoUrl = 'file://' + logoPath;
+  try {
+    logoUrl = 'data:image/png;base64,' + fs.readFileSync(logoPath).toString('base64');
+  } catch { /* keep file:// fallback if logo.png is missing */ }
 
   let content = fs.readFileSync(resolvedHtml, 'utf8');
   if (content.includes('{{LOGO}}')) {
