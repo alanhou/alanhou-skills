@@ -15,6 +15,7 @@ plus optional `references/`, `scripts/`, and `assets/`.
 | `alanhou-paper` | Retells an academic paper as a seven-beat story for non-academics | [ljg-paper](https://github.com/lijigang/ljg-skills) | MIT | none |
 | `alanhou-writes` | Writing engine — dissects one opinion into a 1000-1500 word essay | [ljg-writes](https://github.com/lijigang/ljg-skills) | MIT | none |
 | `alanhou-video-fetch` | Video link → clean transcript (YouTube / bilibili / xiaohongshu / douyin); feeds alanhou-writes / card / ppt | original | MIT | yt-dlp + ffmpeg; whisper for no-sub videos |
+| `alanhou-book` | 拆书 — deconstructs a book (问题/零点/位移/落点/行囊) + ASCII cognitive map; grounds on web or local EPUB/PDF | [ljg-book](https://github.com/lijigang/ljg-skills) | MIT | none (pdftotext for PDFs outside Claude Code) |
 | `alanhou-video` | Animated MP4s from single-file HTML scenes (glitch / aurora / cinematic / data-chart / typewriter / outro) | render pipeline + templates from [nexu-io/html-video](https://github.com/nexu-io/html-video) | Apache-2.0 | Node + Playwright + ffmpeg |
 
 ### One-time dependencies (alanhou-card / alanhou-social-card)
