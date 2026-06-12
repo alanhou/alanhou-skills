@@ -1,0 +1,12 @@
+{
+  "name": "alanhou-skills",
+  "version": "0.1.0",
+  "description": "Alan Hou's personal agent skills - web PPT decks, social cards, content casting, paper reading, writing",
+  "author": {
+    "name": "Alan Hou",
+    "url": "https://github.com/alanhou"
+  },
+  "repository": "https://github.com/alanhou/alanhou-skills",
+  "keywords": ["skills", "ppt", "social-cards", "visualization", "paper-reading", "writing"],
+  "skills": "./skills"
+}

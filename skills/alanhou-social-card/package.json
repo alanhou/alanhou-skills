@@ -1,0 +1,15 @@
+{
+  "name": "alanhou-social-card",
+  "version": "0.1.0",
+  "description": "alanhou-social-card skill dependencies",
+  "main": "index.js",
+  "scripts": {
+    "validate": "node validate-social-deck.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "AGPL-3.0",
+  "dependencies": {
+    "playwright": "^1.60.0"
+  }
+}
