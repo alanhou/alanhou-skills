@@ -15,7 +15,6 @@ for target in "${TARGETS[@]}"; do
     mkdir -p "$target"
     for skill in "$SKILLS_DIR"/*/; do
         name="$(basename "$skill")"
-        [ "$name" = "skill-template" ] && continue
         ln -sfn "${skill%/}" "$target/$name"
         echo "linked $target/$name -> ${skill%/}"
     done

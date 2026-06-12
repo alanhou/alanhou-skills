@@ -5,7 +5,7 @@ description: Template skill — copy this directory to start a new skill. Replac
 
 # Skill Template
 
-> Copy `skills/skill-template/` to `skills/<your-skill-name>/`, rename `name:` in the
+> Copy `skill-template/` to `skills/<your-skill-name>/`, rename `name:` in the
 > frontmatter to match the directory, rewrite the description, then delete the parts
 > of this template you don't need. Delete this blockquote.
 

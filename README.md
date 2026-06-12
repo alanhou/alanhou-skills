@@ -36,14 +36,13 @@ is published, those two skills remain AGPL-3.0. The ljg-derived skills are MIT.
 
 ```
 alanhou-skills/
-├── skills/
-│   ├── skill-template/     # copy this to start a new skill (never installed)
-│   │   ├── SKILL.md        # required: frontmatter + workflow
-│   │   ├── references/     # deep docs, loaded on demand (progressive disclosure)
-│   │   ├── scripts/        # deterministic helpers (validators, converters)
-│   │   ├── assets/         # templates the skill copies/fills in
-│   │   └── agents/openai.yaml  # optional Codex UI metadata
-│   └── <your-skill>/
+├── skills/<your-skill>/    # one directory per skill
+│   ├── SKILL.md            # required: frontmatter + workflow
+│   ├── references/         # deep docs, loaded on demand (progressive disclosure)
+│   ├── scripts/            # deterministic helpers (validators, converters)
+│   ├── assets/             # templates the skill copies/fills in
+│   └── agents/openai.yaml  # optional Codex UI metadata
+├── skill-template/         # copy into skills/ to start a new skill (outside skills/ so installers skip it)
 ├── scripts/install.sh      # symlinks skills into all three CLIs
 └── .claude-plugin/plugin.json  # makes the repo installable as a Claude Code plugin
 ```
@@ -61,13 +60,21 @@ Because they are symlinks, editing or pulling this repo updates all CLIs at once
 ## Install (from GitHub, once published)
 
 ```bash
-npx skills add alanhou/alanhou-skills -g --all        # all skills
-npx skills add alanhou/alanhou-skills -g --skill foo  # one skill
+# all skills, into the three CLIs this repo targets
+npx skills add alanhou/alanhou-skills -g -s '*' -a claude-code -a codex -a gemini-cli -y
+
+# one skill
+npx skills add alanhou/alanhou-skills -g -s alanhou-card -a claude-code -a codex -a gemini-cli -y
 ```
+
+Don't use `--all`: it expands to `--agent '*'` (every agent the CLI knows), and
+agents that lack global-install support (e.g. PromptScript) abort the run with
+"does not support global skill installation". Name agents explicitly with
+repeated `-a` flags (comma-separated lists are not parsed).
 
 ## Creating a new skill
 
-1. `cp -r skills/skill-template skills/my-skill`
+1. `cp -r skill-template skills/my-skill`
 2. Edit `SKILL.md`: set `name: my-skill` (must match the directory), write the
    description with explicit trigger phrases — the description is the only thing
    the model sees before deciding to use the skill.
