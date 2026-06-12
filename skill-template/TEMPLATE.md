@@ -5,9 +5,10 @@ description: Template skill — copy this directory to start a new skill. Replac
 
 # Skill Template
 
-> Copy `skill-template/` to `skills/<your-skill-name>/`, rename `name:` in the
-> frontmatter to match the directory, rewrite the description, then delete the parts
-> of this template you don't need. Delete this blockquote.
+> Copy `skill-template/` to `skills/<your-skill-name>/`, rename this file to
+> `SKILL.md` (it ships as TEMPLATE.md so skill installers don't pick it up),
+> set `name:` to match the directory, rewrite the description, then delete the
+> parts you don't need. Delete this blockquote.
 
 ## What this skill does
 

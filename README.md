@@ -42,7 +42,7 @@ alanhou-skills/
 │   ├── scripts/            # deterministic helpers (validators, converters)
 │   ├── assets/             # templates the skill copies/fills in
 │   └── agents/openai.yaml  # optional Codex UI metadata
-├── skill-template/         # copy into skills/ to start a new skill (outside skills/ so installers skip it)
+├── skill-template/         # copy into skills/ to start a new skill (ships TEMPLATE.md, not SKILL.md, so installers skip it)
 ├── scripts/install.sh      # symlinks skills into all three CLIs
 └── .claude-plugin/plugin.json  # makes the repo installable as a Claude Code plugin
 ```
@@ -74,7 +74,7 @@ repeated `-a` flags (comma-separated lists are not parsed).
 
 ## Creating a new skill
 
-1. `cp -r skill-template skills/my-skill`
+1. `cp -r skill-template skills/my-skill && mv skills/my-skill/TEMPLATE.md skills/my-skill/SKILL.md`
 2. Edit `SKILL.md`: set `name: my-skill` (must match the directory), write the
    description with explicit trigger phrases — the description is the only thing
    the model sees before deciding to use the skill.
