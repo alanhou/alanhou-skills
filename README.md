@@ -15,12 +15,14 @@ plus optional `references/`, `scripts/`, and `assets/`.
 | `alanhou-paper` | Retells an academic paper as a seven-beat story for non-academics | [ljg-paper](https://github.com/lijigang/ljg-skills) | MIT | none |
 | `alanhou-writes` | Writing engine — dissects one opinion into a 1000-1500 word essay | [ljg-writes](https://github.com/lijigang/ljg-skills) | MIT | none |
 | `alanhou-video-fetch` | Video link → clean transcript (YouTube / bilibili / xiaohongshu / douyin); feeds alanhou-writes / card / ppt | original | MIT | yt-dlp + ffmpeg; whisper for no-sub videos |
+| `alanhou-video` | Animated MP4s from single-file HTML scenes (glitch / aurora / cinematic / data-chart / typewriter / outro) | render pipeline + templates from [nexu-io/html-video](https://github.com/nexu-io/html-video) | Apache-2.0 | Node + Playwright + ffmpeg |
 
 ### One-time dependencies (alanhou-card / alanhou-social-card)
 
 ```bash
 cd skills/alanhou-card && npm install && npx playwright install chromium
 cd skills/alanhou-social-card && npm install
+cd skills/alanhou-video && npm install && npx playwright install chromium
 ```
 
 ## Credits & licensing

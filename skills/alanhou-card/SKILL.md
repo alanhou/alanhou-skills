@@ -1,6 +1,6 @@
 ---
 name: alanhou-card
-description: "Content caster (铸). Transforms content into PNG visuals. Seven molds: -l (default) long reading card, -i infograph, -m multi-card reading cards (1080x1440), -v editorial sketchnote (problem→failure→pivot→insight→naming, magazine + archive layout), -c comic (manga-style B&W), -w whiteboard (marker-style board layout), -b big-fonts attachment card (1080x1440, weathered 碑刻 style for 小红书). Output to ~/Downloads/. Use when user says '铸', 'cast', '做成图', '做成卡片', '做成信息图', '做成海报', '视觉笔记', 'sketchnote', '杂志', 'editorial', '漫画', 'comic', 'manga', '白板', 'whiteboard', '大字', '附件图', 'big fonts', '小红书卡片'."
+description: "Content caster (铸). Transforms content into PNG visuals. Seven molds: -l (default) long reading card, -i infograph, -m multi-card reading cards (1080x1440, default for long content), -v editorial sketchnote (problem→failure→pivot→insight→naming, magazine + archive layout), -c comic (manga-style B&W), -w whiteboard (marker-style board layout), -b big-fonts attachment card (1080x1440, weathered 碑刻 style for 小红书). Output to ~/Downloads/. Use when user says '铸', 'cast', '做成图', '做成卡片', '做成信息图', '做成海报', '视觉笔记', 'sketchnote', '杂志', 'editorial', '漫画', 'comic', 'manga', '白板', 'whiteboard', '大字', '附件图', 'big fonts', '小红书卡片'."
 user_invocable: true
 version: "2.3.0"
 ---
@@ -15,13 +15,21 @@ version: "2.3.0"
 
 | 参数 | 模具 | 尺寸 | 说明 |
 |------|------|------|------|
-| `-l`（默认） | 长图 | 1080 x auto | 单张阅读卡，内容自动撑高 |
+| `-l`（默认） | 长图 | 1080 x auto | 单张阅读卡，内容自动撑高（适合 ≤ 800 字） |
 | `-i` | 信息图 | 1080 x auto | 内容驱动的自适应视觉布局 |
-| `-m` | 多卡 | 1080 x 1440 | 自动切分为多张阅读卡片 |
+| `-m` | 多卡 | 1080 x 1440 | 自动切分为多张阅读卡片（长内容的默认选择） |
 | `-v` | 视觉笔记 | 1080 x auto | 编辑式杂志专题：问题→失败→转折→顿悟→命名（6 layout 模具 / 4 字族对比 / 探案档案细节）|
 | `-c` | 漫画 | 1080 x auto | 日式黑白漫画风格，动态选择漫画家视觉语言 |
 | `-w` | 白板 | 1080 x auto | 白板马克笔风格，结构化框图+箭头+彩色标记 |
 | `-b` | 大字 | 1080 x 1440 | 碑刻大字 + 和紙 + 外阴影，小红书附件风格（单句/短段） |
+
+## 长度路由（未指定模具时必做）
+
+太长的单张长图在手机上没人滑得完。用户没有明确指定 `-l` 时：
+
+- 内容 > 约 800 字（或预估渲染高度 > 3 屏 / ~4300px）→ 默认改走 `-m` 多卡，并告知用户
+- 用户明确要 `-l` → 尊重，但超长时提醒一句"这张会很长，要不要切成多卡？"
+- 反向同理：内容只有一两句却用了 `-m`，改推荐 `-l` 或 `-b`
 
 ## 约束
 
@@ -54,7 +62,7 @@ npm install playwright && npx playwright install chromium
 
 ### Footer
 
-- 左侧：logo + 李继刚（已硬编码在模板中）
+- 左侧：logo + Alan Hou（已硬编码在模板中）
 - 右侧：内容来源（可选）——有明确来源时显示（如作者名、arxiv ID、网站名等），无来源时留空。使用 `{{SOURCE_LINE}}` 变量：有来源时填 `<span class="info-source">来源文字</span>`，否则空字符串。适用于 `-l`、`-i`、`-v`、`-c`、`-w` 模具（`-m` 多卡无 footer，不适用）。
 
 ### 交付

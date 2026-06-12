@@ -472,6 +472,7 @@ alanhou-ppt/
     ├── layouts-swiss.md      ← 风格 B · 原始 22P 骨架说明 + 少量明确标注的实验区
     ├── swiss-map-component.md ← 风格 B · S08 地图扩展组件(MapLibre 点位/连线/卡片/控制)
     ├── themes.md             ← 风格 A · 5 套主题色预设（只能选不能自定义）
+    ├── effects-cinematic.md  ← 风格 A · 可选 hero 页特效（颗粒/漏光/极光/故障/扫描线/打字机）
     ├── themes-swiss.md       ← 风格 B · 4 套瑞士风主题色预设（IKB / 柠檬黄 / 柠檬绿 / 安全橙）
     ├── image-prompts.md      ← GPT-M 2.0 配图类型、比例和基础提示词
     ├── screenshot-framing.md ← CleanShot X 式截图适配语义 + 内置背景资产映射
@@ -507,6 +508,7 @@ alanhou-ppt/
 3. **内容层级由字号和字体共同定义** — 最大衬线 = 主标题，中衬线 = 副标，大非衬线 = lead，小非衬线 = body，等宽 = 元数据
 4. **图片是第一公民** — 图片只裁底部，保证顶部和左右完整；网格用 `height:Nvh` 固定，不要用 `aspect-ratio` 撑
 5. **节奏靠 hero 页** — hero 和 non-hero 交替，才不累眼睛
+   - hero 页可选影院级特效（颗粒 / 漏光 / 极光 / 故障），配方与纪律见 `references/effects-cinematic.md`：一份 deck 最多一个特效家族，正文页禁用，风格 B 全部禁用
 6. **术语统一** — Skills 就是 Skills，不要中英混合翻译
 
 ### 风格 B · 瑞士国际主义风
