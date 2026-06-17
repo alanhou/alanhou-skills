@@ -51,7 +51,11 @@ node scripts/publish-wechat.mjs ~/Documents/notes/20260617-标题关键词.md --
 
 ### 5. 你来收尾
 
-回到 Chrome：在 `配图` 占位处插入图片（封面交 `alanhou-social-card`，文中长图交 `alanhou-card`），核对排版，点**发表**。
+回到 Chrome：**手动设封面**、在 `配图` 占位处插入图片（封面交 `alanhou-social-card`，文中长图交 `alanhou-card`），核对排版，点**发表**。
+
+> **封面/配图为什么不自动传？** 公众号页面上唯一暴露的通用文件 `<input>` 会把图片插进**正文**，不是封面位；封面走的是微信自己的素材库弹层，脚本点不动。所以脚本只灌文字、留草稿，图片和封面一律人工。别让脚本去碰上传——实测它只会把封面图误插进正文。
+
+> **新版编辑器的坑（已处理）**：新版公众号把**标题也做成了 ProseMirror**，页面上有两个 `.ProseMirror`（第一个是标题、第二个才是正文）。早期脚本用裸 `.ProseMirror` 会把整篇正文灌进标题、触发 `3016/64`（标题超长）。现在脚本在页面内自动区分：标题取 `#title`/第一个可编辑区，正文取 `.rich_media_content` 里的那个，正文先灌、标题后填，并把标题截到 64 字以内。
 
 ## 只要 HTML、不要自动化？
 
@@ -67,4 +71,5 @@ node scripts/md-to-wechat-html.mjs article.md -o article.html
 
 - **连不上**：确认第 2 步的 Chrome 还开着，端口对得上（默认 9222）。
 - **找不到编辑器标签页**：确认第 3 步的文章编辑器在那个被调试的 Chrome 里、且已打开（不是另一个普通 Chrome 窗口）。
-- **标题/正文没进去**：公众号 DOM 会变。脚本会打印它匹配到的选择器；如果某个 `⚠ 未找到`，对应字段手动填，并到 `scripts/publish-wechat.mjs` 顶部的 `TITLE_SEL` / `BODY_SEL` 里补一个当前的选择器。
+- **标题/正文没进去**：公众号 DOM 会变。脚本会打印它解析到的 `title:` / `body:` 节点和页面可编辑区数量；若 `title` 和 `body` 解析成了同一个节点，会有 `⚠` 警告——这时先看截图，再到 `scripts/publish-wechat.mjs` 的 `resolveEditorInPage()` 里调整正文优先选择器（默认 `.rich_media_content` 内的可编辑区）。
+- **标题被填进正文 / 正文跑到标题**：见上「新版编辑器的坑」。脚本现在正文先灌、标题后填、按 `#title` 与 `.rich_media_content` 区分，已规避；若微信再次改版，对照 `resolveEditorInPage()` 更新。

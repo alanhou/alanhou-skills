@@ -38,27 +38,45 @@ if (!file) { console.error("usage: node publish-wechat.mjs <article.md> [--port 
 const { html, title, author } = mdToWechatHtml(fs.readFileSync(file, "utf8"));
 const here = path.dirname(fileURLToPath(import.meta.url));
 
-const TITLE_SEL = ["#title", "textarea[placeholder*='标题']", ".js_title", "input[placeholder*='标题']"];
-const AUTHOR_SEL = ["#author", "input[placeholder*='作者']", ".js_author"];
-const BODY_SEL = [".ProseMirror", ".rich_media_content .ProseMirror", "#ueditor_0", "[contenteditable='true']"];
+const TITLE_MAX = 64; // WeChat rejects longer titles (error 3016/64)
 
-async function fillField(page, selectors, value) {
-  for (const sel of selectors) {
-    const el = await page.$(sel);
-    if (!el) continue;
-    try {
-      await el.click();
-      await page.evaluate(({ s, v }) => {
-        const node = document.querySelector(s);
-        const setter = Object.getOwnPropertyDescriptor(node.__proto__, "value")?.set;
-        if (setter) setter.call(node, v); else node.value = v;
-        node.dispatchEvent(new Event("input", { bubbles: true }));
-        node.dispatchEvent(new Event("change", { bubbles: true }));
-      }, { s: sel, v: value });
-      return sel;
-    } catch { /* try next */ }
-  }
-  return null;
+// Resolve title/body/author IN-PAGE and tag them, because the new WeChat editor
+// makes BOTH the title and the body `.ProseMirror` — a bare ".ProseMirror" grabs
+// the TITLE, which is how the whole article used to land in the title field.
+// Title is the FIRST editable / #title; body is a DIFFERENT editable, preferring
+// the one inside .rich_media_content, else the tallest. Returns what it tagged.
+function resolveEditorInPage() {
+  const q = (s) => document.querySelector(s);
+  const editables = [...document.querySelectorAll('.ProseMirror,[contenteditable="true"]')];
+  const titleEl = q("#title") || q("textarea[placeholder*='标题'],input[placeholder*='标题']") || editables[0] || null;
+  const bodies = editables.filter((el) => el !== titleEl && !(titleEl && titleEl.contains(el)) && !el.closest("#title"));
+  const bodyEl = bodies.find((el) => el.closest(".rich_media_content"))
+    || bodies.sort((a, b) => b.scrollHeight - a.scrollHeight)[0]
+    || q("#ueditor_0") || null;
+  const authorEl = q("#author") || q("input[placeholder*='作者']");
+  if (titleEl) titleEl.setAttribute("data-xh", "title");
+  if (bodyEl) bodyEl.setAttribute("data-xh", "body");
+  if (authorEl) authorEl.setAttribute("data-xh", "author");
+  const tag = (el) => (el ? (el.id ? "#" + el.id : el.tagName.toLowerCase() + "." + (el.className || "").split(" ")[0]) : null);
+  return { title: tag(titleEl), body: tag(bodyEl), author: !!authorEl, editables: editables.length };
+}
+
+// contenteditable-aware setter (the new title is a ProseMirror, not an <input>)
+async function setTagged(page, which, value) {
+  return page.evaluate(({ w, v }) => {
+    const el = document.querySelector(`[data-xh="${w}"]`);
+    if (!el) return false;
+    el.focus();
+    if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
+      const setter = Object.getOwnPropertyDescriptor(el.__proto__, "value")?.set;
+      setter ? setter.call(el, v) : (el.value = v);
+    } else {
+      el.textContent = v; // contenteditable / ProseMirror
+    }
+    el.dispatchEvent(new Event("input", { bubbles: true }));
+    el.dispatchEvent(new Event("change", { bubbles: true }));
+    return true;
+  }, { w: which, v: value });
 }
 
 async function main() {
@@ -72,53 +90,54 @@ async function main() {
     process.exit(2);
   }
 
-  // find the editor tab among all open pages
+  // find the editor tab and resolve+tag title/body/author in one pass
   const pages = [];
   for (const ctx of browser.contexts()) pages.push(...ctx.pages());
-  let page = null, matchedBody = null;
+  let page = null, resolved = null;
   for (const p of pages) {
-    for (const sel of BODY_SEL) {
-      if (await p.$(sel)) { page = p; matchedBody = sel; break; }
-    }
-    if (page) break;
+    try {
+      const r = await p.evaluate(`(${resolveEditorInPage.toString()})()`);
+      if (r && r.body) { page = p; resolved = r; break; }
+    } catch { /* page not evaluable (chrome:// etc.) */ }
   }
 
   if (!page) {
-    console.error("✗ No WeChat article editor found among open tabs.");
+    console.error("✗ No WeChat article editor (body region) found among open tabs.");
     console.error("  In your debugged Chrome: log into mp.weixin.qq.com, then 新的创作 → 文章,");
-    console.error("  so the editor (with a title field + body area) is open. Then re-run.");
-    await browser.close();
+    console.error("  so the editor (title + body) is open. Then re-run.");
     process.exit(3);
   }
   console.error(`✓ Found editor tab: ${page.url()}`);
-  console.error(`  body editor matched: ${matchedBody}`);
+  console.error(`  resolved → title: ${resolved.title}  body: ${resolved.body}  (editables on page: ${resolved.editables})`);
+  if (resolved.title && resolved.body && resolved.title === resolved.body)
+    console.error("  ⚠ title and body resolved to the same node — check the screenshot before trusting this run");
 
-  // title + author
-  if (title) {
-    const s = await fillField(page, TITLE_SEL, title);
-    console.error(s ? `✓ title set (${s}): ${title}` : `⚠ title field not found — set it manually`);
-  }
-  if (author) {
-    const s = await fillField(page, AUTHOR_SEL, author);
-    console.error(s ? `✓ author set (${s}): ${author}` : `⚠ author field not found — set it manually`);
-  }
-
-  // paste body as a synthetic paste event (ProseMirror/UEditor handle paste)
+  // body FIRST (so a mis-resolve can't dump the article into the title), then title/author
   const plain = html.replace(/<[^>]+>/g, "");
-  const pasted = await page.evaluate(({ sel, h, t }) => {
-    const el = document.querySelector(sel);
-    if (!el) return false;
+  const pasted = await page.evaluate(({ h, t }) => {
+    const el = document.querySelector('[data-xh="body"]');
+    if (!el) return "no body node";
     el.focus();
     try {
       const dt = new DataTransfer();
       dt.setData("text/html", h);
       dt.setData("text/plain", t);
-      const ev = new ClipboardEvent("paste", { clipboardData: dt, bubbles: true, cancelable: true });
-      el.dispatchEvent(ev);
+      el.dispatchEvent(new ClipboardEvent("paste", { clipboardData: dt, bubbles: true, cancelable: true }));
       return true;
     } catch (e) { return String(e); }
-  }, { sel: matchedBody, h: html, t: plain });
-  console.error(pasted === true ? "✓ body pasted into editor" : `⚠ body paste failed: ${pasted} — paste the HTML manually`);
+  }, { h: html, t: plain });
+  console.error(pasted === true ? "✓ body pasted into body editor" : `⚠ body paste failed: ${pasted} — paste the HTML manually`);
+
+  if (title) {
+    let t = title;
+    if (t.length > TITLE_MAX) { t = t.slice(0, TITLE_MAX); console.error(`  ⚠ title truncated to ${TITLE_MAX} chars (WeChat limit)`); }
+    const ok = await setTagged(page, "title", t);
+    console.error(ok ? `✓ title set: ${t}` : `⚠ title field not found — set it manually`);
+  }
+  if (author) {
+    const ok = await setTagged(page, "author", author);
+    console.error(ok ? `✓ author set: ${author}` : `⚠ author field not found — set it manually`);
+  }
 
   await page.waitForTimeout(1500);
 
@@ -135,8 +154,9 @@ async function main() {
   const shot = path.join(here, "..", `wechat-editor-${Date.now()}.png`);
   try { await page.screenshot({ path: shot, fullPage: false }); console.error(`✓ screenshot: ${shot}`); } catch {}
 
-  console.error("\nNext: review the draft in Chrome — insert images at the 配图 placeholders, then click 发表 yourself.");
-  console.error("(This script never publishes.)");
+  console.error("\nNext: review the draft in Chrome — set the 封面 and insert 配图 images by hand, then click 发表 yourself.");
+  console.error("Images/cover are NOT automated on purpose: WeChat's only generic file <input> drops images into the BODY,");
+  console.error("not the 封面 slot, and the cover uses WeChat's own 素材库 dialog. Pick those manually. (This script never publishes.)");
 
   // connectOverCDP: do NOT close — leave the user's Chrome running
   browser.contexts(); // keep ref
