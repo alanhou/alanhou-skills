@@ -47,7 +47,7 @@ version: "1.0.0"
 正文       <- 小标题分段，一段一个意思，能扫读
 金句       <- 全文 2-4 句加粗，是会被截图转发的那几句
 结尾       <- 落点 + 一个明确的下一步（关注/在看/转发）
-配图建议   <- 封面 + 文中配图位置（交给 alanhou-social-card / alanhou-card）
+配图建议   <- 封面 + 文中配图位置，默认小黑 IP 风格（见 references/xiaohei-ip.md）
 ```
 
 ## 标题
@@ -125,7 +125,13 @@ version: "1.0.0"
 
 1. 初稿 + 中文重写择优，得到正文
 2. 4-5 个标题候选，用 `AskUserQuestion` 让用户定标题
-3. 正文末尾附 **配图建议**：封面方向 + 文中 1-3 处配图位置和内容方向
+3. 正文末尾附 **配图建议**：封面方向 + 文中 1-3 处配图位置和内容方向。**正文配图默认走小黑 IP**——小黑用 SVG 画、不靠图像模型：给每处配图挑一个最贴概念的 scene，用脚本渲染（让小黑成为该处概念的动作主体，过一遍「去掉小黑隐喻还成立吗」的判断标准）：
+
+   ```bash
+   node scripts/xiaohei-svg.mjs <scene> --label <文章里的词> --png
+   ```
+
+   scene 目录、画法规范、判断标准、加新场景见 [references/xiaohei-ip.md](references/xiaohei-ip.md)。公众号不收 SVG，发文用 `--png` 出的 PNG，传进编辑器素材库。用户说不要小黑或指定别的风格，就按用户的来
 4. `date "+%Y-%m-%d %H:%M"` 取日期
 5. 写入 `~/Documents/notes/{YYYYMMDD}-{标题关键词}.md`（关键词 ≤ 12 字去标点；用户指定位置则优先），frontmatter：
 

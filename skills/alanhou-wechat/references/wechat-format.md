@@ -36,7 +36,7 @@
 
 ```
 > [配图：封面 — 一句话点题的视觉，方向 XXX]
-> [配图：文中 1 — XXX 概念图 / 数据图]
+> [配图：文中 1 — 小黑 scene=funnel，label=筛选；node scripts/xiaohei-svg.mjs funnel --label 筛选 --png]
 ```
 
-封面交 `alanhou-social-card`（公众号 21:9 + 1:1 对），文中长图/卡片交 `alanhou-card`。
+正文配图默认走 **小黑 IP**（黑色实心小怪物，承担概念的动作主体），用 SVG 脚本画、不靠图像模型——挑 scene + `--label`，见 [xiaohei-ip.md](xiaohei-ip.md)。封面/模板类视觉仍可交 `alanhou-social-card`（公众号 21:9 + 1:1 对）与 `alanhou-card`（文中长图/卡片）。

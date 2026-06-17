@@ -1,10 +1,11 @@
 {
   "name": "alanhou-wechat",
   "version": "0.1.0",
-  "description": "alanhou-wechat optional Path B (Chrome CDP publishing) dependencies",
+  "description": "alanhou-wechat optional scripts: WeChat HTML, 小黑 SVG 配图, Chrome CDP publishing",
   "type": "module",
   "scripts": {
     "html": "node scripts/md-to-wechat-html.mjs",
+    "xiaohei": "node scripts/xiaohei-svg.mjs",
     "publish": "node scripts/publish-wechat.mjs"
   },
   "license": "MIT",
