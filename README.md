@@ -14,6 +14,7 @@ plus optional `references/`, `scripts/`, and `assets/`.
 | `alanhou-card` | "铸" content caster — turns any content into PNG visuals (long card, infograph, sketchnote, comic, whiteboard, big-font card) | [ljg-card](https://github.com/lijigang/ljg-skills) | MIT | Node + Playwright |
 | `alanhou-paper` | Retells an academic paper as a seven-beat story for non-academics | [ljg-paper](https://github.com/lijigang/ljg-skills) | MIT | none |
 | `alanhou-writes` | Writing engine — dissects one opinion into a 1000-1500 word essay | [ljg-writes](https://github.com/lijigang/ljg-skills) | MIT | none |
+| `alanhou-wechat` | WeChat 公众号 writer — hook title (4-5 candidates) + scannable mobile layout + golden quotes + CTA ending; optional Chrome-CDP draft publishing (no API keys) | title & 排版 ideas from [baoyu-skills](https://github.com/JimLiu/baoyu-skills) | MIT | none to write; Playwright only for optional publishing |
 | `alanhou-video-fetch` | Video link → clean transcript (YouTube / bilibili / xiaohongshu / douyin); feeds alanhou-writes / card / ppt | original | MIT | yt-dlp + ffmpeg; whisper for no-sub videos |
 | `alanhou-book` | 拆书 — deconstructs a book (问题/零点/位移/落点/行囊) + ASCII cognitive map; grounds on web or local EPUB/PDF | [ljg-book](https://github.com/lijigang/ljg-skills) | MIT | none (pdftotext for PDFs outside Claude Code) |
 | `alanhou-video` | Animated MP4s from single-file HTML scenes (glitch / aurora / cinematic / data-chart / typewriter / outro) | render pipeline + templates from [nexu-io/html-video](https://github.com/nexu-io/html-video) | Apache-2.0 | Node + Playwright + ffmpeg |
@@ -24,6 +25,8 @@ plus optional `references/`, `scripts/`, and `assets/`.
 cd skills/alanhou-card && npm install && npx playwright install chromium
 cd skills/alanhou-social-card && npm install
 cd skills/alanhou-video && npm install && npx playwright install chromium
+# alanhou-wechat: only if you want optional Chrome-CDP publishing (writing needs nothing)
+cd skills/alanhou-wechat && npm install
 ```
 
 ## Credits & licensing
