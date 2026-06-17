@@ -1,0 +1,30 @@
+{
+  "name": "alanhou-skills",
+  "owner": {
+    "name": "Alan Hou",
+    "url": "https://github.com/alanhou"
+  },
+  "metadata": {
+    "description": "Alan Hou's personal agent skills - web PPT decks, social cards, content casting, paper/book reading, writing, WeChat 公众号",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "alanhou-skills",
+      "description": "Web PPT decks, social cards, content casting, paper/book reading, writing engine, WeChat 公众号 writer, video tools",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/alanhou-book",
+        "./skills/alanhou-card",
+        "./skills/alanhou-paper",
+        "./skills/alanhou-ppt",
+        "./skills/alanhou-social-card",
+        "./skills/alanhou-video",
+        "./skills/alanhou-video-fetch",
+        "./skills/alanhou-wechat",
+        "./skills/alanhou-writes"
+      ]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # alanhou-skills
 
-Personal agent skills, usable from Claude Code, OpenAI Codex CLI, and Gemini CLI.
+Personal agent skills, usable from Claude Code, OpenAI Codex CLI, Gemini CLI, and Antigravity (`agy`).
 All three tools support the same [Agent Skills](https://agentskills.io) standard:
 a skill is a directory containing a `SKILL.md` with `name` + `description` frontmatter,
 plus optional `references/`, `scripts/`, and `assets/`.
@@ -48,7 +48,9 @@ alanhou-skills/
 │   └── agents/openai.yaml  # optional Codex UI metadata
 ├── skill-template/         # copy into skills/ to start a new skill (ships TEMPLATE.md, not SKILL.md, so installers skip it)
 ├── scripts/install.sh      # symlinks skills into all three CLIs
-└── .claude-plugin/plugin.json  # makes the repo installable as a Claude Code plugin
+└── .claude-plugin/
+    ├── plugin.json       # makes the repo installable as a Claude Code plugin
+    └── marketplace.json  # makes the repo installable in Antigravity (agy) — lists all skills
 ```
 
 ## Install (local development)
@@ -76,6 +78,25 @@ agents that lack global-install support (e.g. PromptScript) abort the run with
 "does not support global skill installation". Name agents explicitly with
 repeated `-a` flags (comma-separated lists are not parsed).
 
+## Install (Antigravity CLI `agy`)
+
+`agy` doesn't scan `~/.claude/skills` or `~/.agents/skills`; it uses a plugin
+marketplace. This repo ships `.claude-plugin/marketplace.json` (one plugin
+exposing all skills), so inside an `agy` session:
+
+```text
+/plugin marketplace add alanhou/alanhou-skills
+/plugin install alanhou-skills@alanhou-skills
+```
+
+Or from a local clone, point `agy` at the repo root (it reads the marketplace
+manifest and registers every skill):
+
+```bash
+agy plugin install ./        # run from the repo root
+agy plugin list              # confirm: imports → alanhou-skills, components: [skills]
+```
+
 ## Creating a new skill
 
 1. `cp -r skill-template skills/my-skill && mv skills/my-skill/TEMPLATE.md skills/my-skill/SKILL.md`
@@ -92,3 +113,4 @@ repeated `-a` flags (comma-separated lists are not parsed).
 | Claude Code | `~/.claude/skills/` | automatic, or `/my-skill` | also installable as plugin via `.claude-plugin/` |
 | Codex CLI | `~/.agents/skills/` | automatic, or `$my-skill` / `/skills` | optional `agents/openai.yaml` for UI metadata |
 | Gemini CLI | `~/.agents/skills/` (alias of `~/.gemini/skills/`) | automatic; `/skills list` to inspect | needs v0.26+; asks permission on activation |
+| Antigravity (`agy`) | plugin store (not a skills dir) | automatic once installed | install via marketplace, not the symlinks — see "Install (Antigravity CLI)". `agy` resolves a plugin's skills from `marketplace.json`, so `.claude-plugin/marketplace.json` is required (a bare `plugin.json` is not enough) |
