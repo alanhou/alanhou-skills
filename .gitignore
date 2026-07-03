@@ -5,3 +5,9 @@ output/
 .claude/
 wechat-editor-*.png
 package-lock.json
+
+# Social-card / Live Photo task artifacts (generated work lives in local-tests/)
+local-tests/
+__pycache__/
+*.pyc
+*.pvt/
