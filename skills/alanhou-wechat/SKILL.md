@@ -47,7 +47,7 @@ version: "1.0.0"
 正文       <- 小标题分段，一段一个意思，能扫读
 金句       <- 全文 2-4 句加粗，是会被截图转发的那几句
 结尾       <- 落点 + 一个明确的下一步（关注/在看/转发）
-配图建议   <- 封面 + 文中配图位置，默认小黑 IP 风格（见 references/xiaohei-ip.md）
+配图建议   <- 封面 + 文中配图位置，概念图默认小黑 IP（见 references/xiaohei-ip.md），实景图走图库（Pexels/Unsplash/Pixabay）
 ```
 
 ## 标题
@@ -132,6 +132,14 @@ version: "1.0.0"
    ```
 
    scene 目录、画法规范、判断标准、加新场景见 [references/xiaohei-ip.md](references/xiaohei-ip.md)。公众号不收 SVG，发文用 `--png` 出的 PNG，传进编辑器素材库。用户说不要小黑或指定别的风格，就按用户的来
+
+   **实景类配图走图库**——当配图位置需要的是实拍照片而非概念图（地点 / 街景 / 食物 / 产品 / 氛围实景，小黑隐喻套不上的），且环境里有 `PEXELS_API_KEY` / `UNSPLSH_API_KEY` / `PIXABAY_API_KEY` 中至少一个，用图库脚本取图：
+
+   ```bash
+   node scripts/fetch-stock-image.mjs --query "<关键词>" --orientation landscape --out assets --name <语义名>
+   ```
+
+   默认按 Pexels → Unsplash → Pixabay 顺序尝试（Pexels 支持中文关键词，国内场景优先）；先 `--list` 看候选再 `--index N` 下载。来源会自动记进 `assets/SOURCES.md`；交付时告知用户图片来自图库、由用户决定是否可用。概念/观点类配图仍然默认小黑，不要用图库照片硬凑
 4. `date "+%Y-%m-%d %H:%M"` 取日期
 5. 写入 `~/Documents/notes/{YYYYMMDD}-{标题关键词}.md`（关键词 ≤ 12 字去标点；用户指定位置则优先），frontmatter：
 

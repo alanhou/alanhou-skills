@@ -90,7 +90,7 @@ Use these numbers as the first diagnosis. Multimodal inspection is still useful 
 - Screenshots remain readable.
 - Generated images do not contain unwanted text, logos, page numbers, or poster borders.
 - Photo crops feel intentional.
-- For any image fetched from the web (Pexels / Unsplash / Flickr CC / Wallhaven / direct search): the source URL is recorded in `assets/SOURCES.md`, and the user has been asked whether to add an in-image attribution caption. The user's answer is honored. Flickr CC attribution preserves the author name when the user opts in.
+- For any image fetched from the web (Pexels / Unsplash / Pixabay / Flickr CC / Wallhaven / direct search): the source URL is recorded in `assets/SOURCES.md` (`scripts/fetch-stock-image.mjs` appends this automatically for API fetches; manual downloads need a manual line), and the user has been asked whether to add an in-image attribution caption. The user's answer is honored. Flickr CC attribution preserves the author name when the user opts in.
 
 ## Text-On-Image (when applicable)
 

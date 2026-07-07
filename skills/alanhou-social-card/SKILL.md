@@ -102,7 +102,7 @@ Gather only the missing information that changes the output:
   ```
   这篇我需要 1-2 张图。三种走法：
   A. 你自己有照片 / 截图，传给我（推荐——最不"AI 感"）
-  B. 我去 Pexels / Unsplash / Flickr 帮你找
+  B. 我去 Pexels / Unsplash / Pixabay / Flickr 帮你找
   C. 用 AI 生成
   ```
 
@@ -261,15 +261,28 @@ Policy: **grab first, disclose after, let the user decide on attribution.** Do n
 
 Recommended sources, in order of preference. **All five below are free-tier libraries with no required licensing fees**; we do not pull from paid stock sites (视觉中国 / Getty / 站酷海洛 etc.).
 
-1. **Unsplash** — `https://unsplash.com/s/photos/<keyword>`. Strong for outdoor / lifestyle / atmospheric backdrops. English keywords work best. License is permissive but verify case by case.
-2. **Pexels** — `https://www.pexels.com/search/<keyword>/` or `https://www.pexels.com/zh-cn/search/<keyword>/`. **Supports Chinese keyword search natively** — fills Unsplash's gap on 国内场景 (中文街景 / 国风物件 / 本地地名). Use this first when the subject is China-specific or the keyword is Chinese. Free under Pexels License.
-3. **Flickr CC-licensed pool** — `https://www.flickr.com/search/?text=<keyword>&license=2%2C3%2C4%2C5%2C6%2C9`. The license filter (`license=2,3,4,5,6,9`) restricts to Creative Commons photos. Fills the "documentary realness" gap: street photography, people-in-context, real interiors, non-styled scenes that Unsplash/Pexels lack. Always preserve CC attribution if the user opts in.
-4. **Wallhaven** — `https://wallhaven.cc/search?q=<keyword>`. Strong for game / anime / wallpaper themes. Content is user-uploaded, rights are unverified.
-5. **Direct web search** — when a specific subject is needed (a product render, a game still, a historical photo). Use WebFetch / WebSearch to find a candidate URL.
+1. **Pexels** — API-supported. **Supports Chinese keyword search natively** — fills Unsplash's gap on 国内场景 (中文街景 / 国风物件 / 本地地名). Use this first when the subject is China-specific or the keyword is Chinese. Free under Pexels License. Manual URL: `https://www.pexels.com/search/<keyword>/` or `https://www.pexels.com/zh-cn/search/<keyword>/`.
+2. **Unsplash** — API-supported. Strong for outdoor / lifestyle / atmospheric backdrops. English keywords work best. License is permissive but verify case by case. Manual URL: `https://unsplash.com/s/photos/<keyword>`.
+3. **Pixabay** — API-supported. Broad general-purpose library (photos + illustrations), free for commercial use with no attribution required. Curation is weaker than Pexels/Unsplash and resolution tops out lower (~1280px without approval) — use as backfill when the first two miss.
+4. **Flickr CC-licensed pool** — manual only: `https://www.flickr.com/search/?text=<keyword>&license=2%2C3%2C4%2C5%2C6%2C9`. The license filter (`license=2,3,4,5,6,9`) restricts to Creative Commons photos. Fills the "documentary realness" gap: street photography, people-in-context, real interiors, non-styled scenes that Unsplash/Pexels lack. Always preserve CC attribution if the user opts in.
+5. **Wallhaven** — manual only: `https://wallhaven.cc/search?q=<keyword>`. Strong for game / anime / wallpaper themes. Content is user-uploaded, rights are unverified.
+6. **Direct web search** — when a specific subject is needed (a product render, a game still, a historical photo). Use WebFetch / WebSearch to find a candidate URL.
 
-Editorial-mode picking order: **Pexels (if keyword is Chinese / China-specific) → Unsplash → Flickr CC (if you need real-life feel) → direct search**. Swiss mode rarely needs any of these — product renders, UI screenshots, and keyshot-style images should be user-supplied or AI-generated, not stock.
+Editorial-mode picking order: **Pexels (if keyword is Chinese / China-specific) → Unsplash → Pixabay (backfill) → Flickr CC (if you need real-life feel) → direct search**. Swiss mode rarely needs any of these — product renders, UI screenshots, and keyshot-style images should be user-supplied or AI-generated, not stock.
 
-How to fetch:
+How to fetch — **API-first**. If any of `PEXELS_API_KEY` / `UNSPLSH_API_KEY` / `PIXABAY_API_KEY` is set in the environment, use the bundled script instead of scraping search pages:
+
+```bash
+node <SKILL_ROOT>/scripts/fetch-stock-image.mjs --query "<keyword>" \
+  --orientation landscape|portrait|square --out <task-dir>/assets --name hero-mountain
+```
+
+- `--provider auto` (default) tries Pexels → Unsplash → Pixabay in order, skipping any provider whose key is missing; `--provider pexels|unsplash|pixabay` pins one.
+- Add `--list` to print candidates as JSON (page URL, author, size, alt text) and pick by eye first; then re-run with `--index N` to download a specific candidate. `--count N` grabs several at once.
+- The script names files from `--name` (purpose-based, e.g. `hero-mountain.jpg`) and **auto-appends the provenance line to `assets/SOURCES.md`** — no manual bookkeeping needed for API fetches.
+- Match `--orientation` to the target well: `portrait` for 3:4 XHS heroes, `landscape` for wide wells and 21:9 covers.
+
+Manual fallback (no API keys set, or the APIs return nothing usable, or the source is Flickr / Wallhaven / direct search):
 
 - Use WebFetch or `curl` to download the image into the task folder's `assets/` directory.
 - Name the file by purpose, not by hash: `assets/hero-mountain.jpg`, `assets/ui-pulse-card.png`.
