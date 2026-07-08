@@ -153,6 +153,7 @@ version: "1.0.0"
    ```
 
 6. 报告路径，并提示可接力（都不要自动做，等用户说）：
+   - **排版**：`alanhou-wechat-layout`（6 套主题组件库，Markdown → 粘贴不掉样式的公众号 HTML）
    - **封面**：`alanhou-social-card`（公众号 21:9 + 1:1 封面对）
    - **文中卡片 / 长图**：`alanhou-card`
    - **发布**：可选，见下
@@ -163,7 +164,7 @@ version: "1.0.0"
 
 两条路，都不需要 AppID/AppSecret（个人订阅号也能用）：
 
-- **只要 HTML**（最稳）：`node scripts/md-to-wechat-html.mjs <article.md> -o out.html`，得到内联样式、可直接全选粘进编辑器的 HTML。
+- **只要 HTML**（最稳）：要主题化排版（章节编号/关键词下划线/引言卡，6 套主题）用 `alanhou-wechat-layout` skill，产出带「复制」按钮的预览页；要最简朴素样式则 `node scripts/md-to-wechat-html.mjs <article.md> -o out.html`，得到内联样式、可直接全选粘进编辑器的 HTML。
 - **Path B · Chrome CDP**：脚本连上你**已登录、已打开文章编辑器**的 Chrome，自动填标题/正文、留成草稿（**永不发表**，配图和发表由用户手动收尾）。
 
   ```bash

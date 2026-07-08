@@ -16,6 +16,7 @@ plus optional `references/`, `scripts/`, and `assets/`.
 | `alanhou-paper` | Retells an academic paper as a seven-beat story for non-academics | [ljg-paper](https://github.com/lijigang/ljg-skills) | MIT | none |
 | `alanhou-writes` | Writing engine — dissects one opinion into a 1000-1500 word essay | [ljg-writes](https://github.com/lijigang/ljg-skills) | MIT | none |
 | `alanhou-wechat` | WeChat 公众号 writer — hook title (4-5 candidates) + scannable mobile layout + golden quotes + CTA ending; 小黑 IP 配图 drawn as SVG (7 scenes); optional Chrome-CDP draft publishing (no API keys) | title & 排版 ideas from [baoyu-skills](https://github.com/JimLiu/baoyu-skills) | MIT | none to write; Playwright only for 配图 PNG / publishing |
+| `alanhou-wechat-layout` | WeChat 公众号 layout engine — Markdown/docx/PDF → themed inline-styled HTML that pastes into the 公众号 editor without losing styles; 6 theme component libraries + theme generator (from description or reference image), auto chapter numbering, per-paragraph keyword underlines, dual lint/validate scripts, copy-button preview page | [gzh-design-skill](https://github.com/isjiamu/gzh-design-skill) by 甲木 × 摸鱼小李 | AGPL-3.0 | python3 (validators) |
 | `alanhou-video-fetch` | Video link → clean transcript (YouTube / bilibili / xiaohongshu / douyin); feeds alanhou-writes / card / ppt | original | MIT | yt-dlp + ffmpeg; whisper for no-sub videos |
 | `alanhou-book` | 拆书 — deconstructs a book (问题/零点/位移/落点/行囊) + ASCII cognitive map; grounds on web or local EPUB/PDF | [ljg-book](https://github.com/lijigang/ljg-skills) | MIT | none (pdftotext for PDFs outside Claude Code) |
 | `alanhou-video` | Animated MP4s from single-file HTML scenes (glitch / aurora / cinematic / data-chart / typewriter / outro) | render pipeline + templates from [nexu-io/html-video](https://github.com/nexu-io/html-video) | Apache-2.0 | Node + Playwright + ffmpeg |
@@ -33,9 +34,10 @@ cd skills/alanhou-wechat && npm install && npx playwright install chromium  # ch
 ## Credits & licensing
 
 Skills here are adapted and rebranded from upstream open-source work, with attribution
-notices kept in each `SKILL.md`. The three guizang-derived skills retain their upstream
-**AGPL-3.0** license (a `LICENSE` copy sits inside each skill directory) — if this repo
-is published, those three skills remain AGPL-3.0. The ljg-derived skills are MIT.
+notices kept in each `SKILL.md`. The three guizang-derived skills and `alanhou-wechat-layout`
+(from gzh-design-skill) retain their upstream **AGPL-3.0** license (a `LICENSE` copy sits
+inside each skill directory) — if this repo is published, those four skills remain
+AGPL-3.0. The ljg-derived skills are MIT.
 
 ## Layout
 

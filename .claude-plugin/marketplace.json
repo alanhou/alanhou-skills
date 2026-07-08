@@ -11,7 +11,7 @@
   "plugins": [
     {
       "name": "alanhou-skills",
-      "description": "Web PPT decks, social cards, content casting, paper/book reading, writing engine, WeChat 公众号 writer, video tools",
+      "description": "Web PPT decks, social cards, content casting, paper/book reading, writing engine, WeChat 公众号 writer + layout engine, video tools",
       "source": "./",
       "strict": false,
       "skills": [
@@ -24,6 +24,7 @@
         "./skills/alanhou-video",
         "./skills/alanhou-video-fetch",
         "./skills/alanhou-wechat",
+        "./skills/alanhou-wechat-layout",
         "./skills/alanhou-writes"
       ]
     }
