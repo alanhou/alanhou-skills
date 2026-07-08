@@ -6,8 +6,6 @@ user_invocable: true
 
 # alanhou-book: 拆书
 
-<!-- attribution: alanhou-book is derived from ljg-book in ljg-skills by lijigang (https://github.com/lijigang/ljg-skills), MIT. -->
-
 输入一本书，输出它在认知史里挪动的那一步。
 
 ## 拆书是什么

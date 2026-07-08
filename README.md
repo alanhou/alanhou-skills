@@ -11,6 +11,7 @@ plus optional `references/`, `scripts/`, and `assets/`.
 |-------|--------------|--------------|---------|------------|
 | `alanhou-ppt` | Single-file HTML horizontal swipe decks (electronic-magazine or Swiss style), WebGL backgrounds, validated layouts | [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill) | AGPL-3.0 | none |
 | `alanhou-social-card` | Xiaohongshu 3:4 card sets + WeChat 21:9 / 1:1 cover pairs in the same style system | [guizang-social-card-skill](https://github.com/op7418/guizang-social-card-skill) | AGPL-3.0 | Playwright (validation) |
+| `alanhou-illustration` | Labeled material illustrations (带字解释图), chart beautify from screenshots/data, reference-informed concept visuals — the "middle image" that goes inside cards/PPT/articles; outputs image-gen prompt plans + images when an image tool is available | [guizang-material-illustration](https://github.com/op7418/guizang-material-illustration) | AGPL-3.0 | `OPENAI_API_KEY` and/or `GEMINI_API_KEY` for bundled generate-image.mjs (custom endpoints via `OPENAI_BASE_URL` / `GEMINI_BASE_URL`); prompt plans work without any key |
 | `alanhou-card` | "铸" content caster — turns any content into PNG visuals (long card, infograph, sketchnote, comic, whiteboard, big-font card) | [ljg-card](https://github.com/lijigang/ljg-skills) | MIT | Node + Playwright |
 | `alanhou-paper` | Retells an academic paper as a seven-beat story for non-academics | [ljg-paper](https://github.com/lijigang/ljg-skills) | MIT | none |
 | `alanhou-writes` | Writing engine — dissects one opinion into a 1000-1500 word essay | [ljg-writes](https://github.com/lijigang/ljg-skills) | MIT | none |
@@ -32,9 +33,9 @@ cd skills/alanhou-wechat && npm install && npx playwright install chromium  # ch
 ## Credits & licensing
 
 Skills here are adapted and rebranded from upstream open-source work, with attribution
-notices kept in each `SKILL.md`. The two guizang-derived skills retain their upstream
+notices kept in each `SKILL.md`. The three guizang-derived skills retain their upstream
 **AGPL-3.0** license (a `LICENSE` copy sits inside each skill directory) — if this repo
-is published, those two skills remain AGPL-3.0. The ljg-derived skills are MIT.
+is published, those three skills remain AGPL-3.0. The ljg-derived skills are MIT.
 
 ## Layout
 

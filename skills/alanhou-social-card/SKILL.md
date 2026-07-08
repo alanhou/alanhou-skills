@@ -251,6 +251,7 @@ When the user has no images:
 
 - This branch only runs if the Step 1 "三选一" gate landed on B (web-sourced) or C (AI-generated). Never silently fall into B or C — the user picked one.
 - For C (AI-generated): use generated bitmaps only where they add real value, usually 1-2 pages. Generate images that match the page's visual role, not generic decoration. Keep generated images free of embedded titles, page numbers, logos, or fake UI labels unless explicitly needed.
+- For C, when the image must *explain* something — a labeled concept/mechanism diagram, a process loop, or a chart redraw destined for an image well — hand the illustration to the `alanhou-illustration` skill (it owns label rules, chart accuracy, and the material style), then place the returned image here.
 - For B (web-sourced): see the Web-Sourced Images section below.
 
 #### Web-Sourced Images (fallback when user has none)
